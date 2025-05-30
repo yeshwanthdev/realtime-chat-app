@@ -12,7 +12,7 @@ const messageSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    test: {
+    text: {
       type: String,
     },
     image: {
@@ -24,4 +24,4 @@ const messageSchema = new mongoose.Schema(
   }
 );
 
-moduke.exports = mongoose.model("Message", messageSchema);
+module.exports = mongoose.model("Message", messageSchema);
