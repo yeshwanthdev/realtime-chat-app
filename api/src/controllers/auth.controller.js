@@ -1,5 +1,5 @@
 const rm = require("@root/rm.js");
-const userModel = require("@modal/user.model.js");
+const userModel = require("@model/user.model.js");
 const bcrypt = require("bcryptjs");
 const { generateToken } = require("@lib/utils.js");
 
@@ -42,6 +42,7 @@ const signup = async (req, res) => {
       fullName: newUser._doc.fullName,
       email: newUser._doc.email,
       profilePic: newUser._doc.profilePic,
+      code: rm.utils.guid(),
     });
   } catch (error) {
     console.log("Error in signup controller", error.message);

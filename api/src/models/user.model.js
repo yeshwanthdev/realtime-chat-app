@@ -28,6 +28,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
+    code: {
+      type: String,
+      default: null,
+    },
   },
   { timestamps: true }
 );

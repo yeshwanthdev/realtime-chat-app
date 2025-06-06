@@ -9,7 +9,7 @@ const aliasConfig = {
   "@config": `${root}/config`,
   "@controller": `${api}/controllers`,
   "@route": `${api}/routes`,
-  "@modal": `${api}/modals`,
+  "@model": `${api}/models`,
   "@middleware": `${api}/middlewares`,
   "@service": `${api}/services`,
   "@wrapper": `${api}/wrappers`,
