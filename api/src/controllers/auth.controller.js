@@ -25,6 +25,8 @@ const signup = async (req, res) => {
       fullName,
       email,
       password: hashedPassword,
+      code: rm.utils.guid(),
+      status: true,
     });
 
     // const userData = newUser.toObject();
