@@ -1,19 +1,19 @@
-const moduleAlias = require("module-alias"),
-  path = require("path"),
-  root = path.join(__dirname, "../"),
-  api = `${root}/src`;
+const moduleAlias = require('module-alias'),
+	path = require('path'),
+	root = path.join(__dirname, '../'),
+	api = `${root}/src`;
 
 const aliasConfig = {
-  "@root": root,
-  "@api": api,
-  "@config": `${root}/config`,
-  "@controller": `${api}/controllers`,
-  "@route": `${api}/routes`,
-  "@model": `${api}/models`,
-  "@middleware": `${api}/middlewares`,
-  "@service": `${api}/services`,
-  "@wrapper": `${api}/wrappers`,
-  "@lib": `${api}/lib`,
+	'@root': root,
+	'@api': api,
+	'@config': `${root}/config`,
+	'@controller': `${api}/controllers`,
+	'@route': `${api}/routes`,
+	'@model': `${api}/models`,
+	'@middleware': `${api}/middlewares`,
+	'@service': `${api}/services`,
+	'@wrapper': `${api}/wrappers`,
+	'@lib': `${api}/lib`,
 };
 
 module.exports = () => moduleAlias.addAliases(aliasConfig);
