@@ -14,6 +14,7 @@ const PORT = process.env.PORT || 4000;
 
 app.use(cookieParser());
 app.use(express.json());
+app.use(require('@middleware/cors.middleware'));
 app.use('/api/auth', authRoutes);
 app.use('/api/message', messageRoutes);
 

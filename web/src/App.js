@@ -1,23 +1,30 @@
-import RM from './rm';
-import HomePage from './pages/HomePage';
-import SignUpPage from './pages/SignUpPage';
-import LoginPage from './pages/LoginPage';
-import SettingsPage from './pages/SettingsPage';
-import ProfilePage from './pages/ProfilePage';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import NavBar from './components/NavBar';
+import RM from '@root/rm';
+import HomePage from '@pages/Home';
+import SignUpPage from '@pages/SignUp';
+import LoginPage from '@pages/Login';
+import SettingsPage from '@pages/Settings';
+import ProfilePage from '@pages/Profile';
+import NavBar from '@components/NavBar';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
+import { useAuthStore } from './store/useAuthStore';
+import { useThemeStore } from './store/useThemeStore';
 
 const App = () => {
+	const { authUser } = useAuthStore();
+	const { theme } = useThemeStore();
+
 	return (
 		<BrowserRouter>
 			<NavBar />
 			<Routes>
-				<Route path="/" element={<HomePage />} />
-				<Route path="/signup" element={<SignUpPage />} />
-				<Route path="/login" element={<LoginPage />} />
+				<Route path="/" element={authUser ? <HomePage /> : <Navigate to="/login" />} />
+				<Route path="/signup" element={!authUser ? <SignUpPage /> : <Navigate to="/" />} />
+				<Route path="/login" element={!authUser ? <LoginPage /> : <Navigate to="/" />} />
 				<Route path="/settings" element={<SettingsPage />} />
-				<Route path="/profile" element={<ProfilePage />} />
+				<Route path="/profile" element={authUser ? <ProfilePage /> : <Navigate to="/login" />} />
 			</Routes>
+			<Toaster />
 		</BrowserRouter>
 	);
 };

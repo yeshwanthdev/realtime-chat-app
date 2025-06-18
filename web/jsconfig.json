@@ -4,16 +4,17 @@
 		"module": "commonjs",
 		"target": "es6",
 		"baseUrl": "src",
-		"emitDecoratorMetadata": true,
-		"experimentalDecorators": true,
 		"paths": {
-			"@/*": ["./src/*"],
-			"@config/*": ["./src/config/*"],
-			"@pages/*": ["./src/pages/*"],
-			"@components/*": ["./src/components/*"],
-			"@services/*": ["./src/services/*"],
-			"@hooks/*": ["./src/hooks/*"],
-			"@utils/*": ["./src/utils/*"]
-		}
+			"@root/*": ["*"],
+			"@config/*": ["config/*"],
+			"@pages/*": ["pages/*"],
+			"@components/*": ["components/*"],
+			"@store/*": ["store/*"],
+			"@services/*": ["services/*"],
+			"@hooks/*": ["hooks/*"],
+			"@utils/*": ["utils/*"]
+		},
+		"emitDecoratorMetadata": true,
+		"experimentalDecorators": true
 	}
 }

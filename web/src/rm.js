@@ -1,13 +1,18 @@
 import * as lodash from 'lodash';
 import commonConfig from './config/common.js';
+import toast from 'react-hot-toast';
 
 class RM {
-	commonConfig() {
+	get commonConfig() {
 		return commonConfig;
 	}
 
-	lodash() {
+	get lodash() {
 		return lodash;
+	}
+
+	get toast() {
+		return toast;
 	}
 }
 
