@@ -83,6 +83,10 @@ const sendMessage = async (req, res) => {
 			receiverId,
 			text,
 			image: imageMeta,
+
+			//common fields
+			createdBy: req.user._id,
+			modifiedBy: req.user._id,
 			status: true,
 		};
 

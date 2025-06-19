@@ -1,4 +1,5 @@
-const jwt = require('jsonwebtoken'),
+const rm = require('@root/rm'),
+	jwt = require('jsonwebtoken'),
 	uuid = require('uuid').v4;
 
 class Utils {
@@ -29,6 +30,26 @@ class Utils {
 
 	guid() {
 		return uuid();
+	}
+
+	get UTCDateNow() {
+		const isoDate = new Date().toISOString();
+		return Date.now(isoDate);
+	}
+
+	get commonSchema() {
+		return {
+			code: {
+				type: String,
+				default: null,
+			},
+			dateCreated: { type: Date, default: rm.utils.UTCDateNow },
+			dateModified: { type: Date, default: rm.utils.UTCDateNow },
+			createdBy: { type: rm.mongoose.Schema.Types.ObjectId, ref: 'users' },
+			modifiedBy: { type: rm.mongoose.Schema.Types.ObjectId, ref: 'users' },
+			json: { type: Object },
+			status: { type: Boolean, default: true },
+		};
 	}
 }
 

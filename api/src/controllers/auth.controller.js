@@ -25,6 +25,8 @@ const signup = async (req, res) => {
 			fullName,
 			email,
 			password: hashedPassword,
+
+			//common fields
 			code: rm.utils.guid(),
 			status: true,
 		});
@@ -44,7 +46,8 @@ const signup = async (req, res) => {
 			fullName: newUser._doc.fullName,
 			email: newUser._doc.email,
 			profilePic: newUser._doc.profilePic,
-			code: rm.utils.guid(),
+			code: newUser._doc.code,
+			status: true,
 		});
 	} catch (error) {
 		console.log('Error in signup controller', error.message);
