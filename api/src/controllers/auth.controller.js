@@ -2,6 +2,7 @@ const rm = require('@root/rm.js');
 const userModel = require('@model/user.model.js');
 const bcrypt = require('bcryptjs');
 const { generateToken } = require('@lib/utils.js');
+const S3Service = require('@service/s3Service.js');
 
 const signup = async (req, res) => {
 	try {
@@ -58,7 +59,7 @@ const signup = async (req, res) => {
 const login = async (req, res) => {
 	try {
 		const { email, password } = req.body;
-		const user = await userModel.findOne({ email: email });
+		const user = await userModel.findOne({ email: email }).lean();
 
 		if (rm._.isEmpty(user)) {
 			return res.status(400).json({ message: 'Invalid Credentials' });
@@ -73,11 +74,8 @@ const login = async (req, res) => {
 		// generating jwt token
 		await generateToken(user._id, res);
 
-		res.status(200).json({
-			_id: user._id,
-			fullName: user.fullName,
-			email: user.email,
-		});
+		const userWithoutPassword = rm._.omit(user, ['password']);
+		res.status(200).json(userWithoutPassword);
 	} catch (error) {
 		console.log('Error in login controller', error.message);
 		res.status(500).json({ message: 'Internal Server Error' });
@@ -94,8 +92,61 @@ const logout = async (req, res) => {
 	}
 };
 
+const update = async (req, res) => {
+	try {
+		const { profilePicture } = req.body;
+		const userId = req.user._id;
+
+		if (!profilePicture) {
+			return res.status(400).json({ message: 'Profile Picture is required' });
+		}
+
+		// Handle base64 image string
+		let matches = profilePicture.match(/^data:(image\/(png|jpeg|jpg));base64,(.+)$/);
+		if (!matches) {
+			return res.status(400).json({ message: 'Invalid image format' });
+		}
+		const mimeType = matches[1];
+		const imageBuffer = Buffer.from(matches[3], 'base64');
+		const extension = mimeType.split('/')[1];
+		const fileName = `profile_${rm.utils.guid()}.${extension}`;
+		const key = `chat-app/${rm.utils.guid()}/${fileName}`;
+
+		const s3 = new S3Service({
+			bucketName: process.env.S3_BUCKET,
+			region: process.env.AWS_REGION,
+			accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+			secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+		});
+
+		const result = await s3.createObject({
+			key: key,
+			data: imageBuffer,
+			contentType: mimeType,
+		});
+
+		const fileUrl = `https://${process.env.S3_BUCKET}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}`;
+		const imageMeta = {
+			location: fileUrl,
+			key: key,
+			name: fileName,
+			type: mimeType,
+		};
+
+		const updatedUser = await userModel.findByIdAndUpdate(userId, { profilePicture: imageMeta }, { new: true }).lean();
+
+		const userWithoutPassword = rm._.omit(updatedUser, ['password']);
+
+		res.status(200).json(userWithoutPassword);
+	} catch (error) {
+		console.log('error in update profile:', error);
+		res.status(500).json({ message: 'Internal server error' });
+	}
+};
+
 module.exports = {
 	signup,
 	login,
 	logout,
+	update,
 };
